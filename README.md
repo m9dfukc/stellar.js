@@ -47,6 +47,16 @@ If you want an element's background image to reposition on scroll, simply add th
 
 As with parallax elements, the ratio is relative to the natural scroll speed. For ratios lower than 1, to avoid jittery scroll performance, set the element's CSS 'background-attachment' to fixed.
 
+## Modifications to Origin
+
+If you wanna stop a parallax transition if the mother container reaches the top:
+
+``` html
+<div data-stellar-limit="true">
+```
+
+As of it's now the parralax-ratio for this element will jump to 1 ... custom speed mods to come.
+
 ## Configuring Offsets
 
 Stellar.js' most powerful feature is the way it aligns elements.
