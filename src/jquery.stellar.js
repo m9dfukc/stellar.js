@@ -1,3 +1,14 @@
+/*!
+ * Stellar.js v0.4.0
+ * http://markdalgleish.com/projects/stellar.js
+ * https://github.com/frischmilch/stellar.js
+ * https://github.com/m9dfukc/stellar.js
+ * 
+ * Copyright 2012, Mark Dalgleish, Johannes Henseler, Andreas Schmelas
+ * This content is released under the MIT license
+ * http://markdalgleish.mit-license.org
+ */
+
 ;(function($, window, document, undefined){
 
 	var pluginName = 'stellar',
@@ -315,6 +326,9 @@
 					parentOffsetLeft: parentOffsetLeft,
 					parentOffsetTop: parentOffsetTop,
 					stellarRatio: $this.data('stellar-ratio') !== undefined ? $this.data('stellar-ratio') : 1,
+					stellarRatio_init: $this.data('stellar-ratio') !== undefined ? $this.data('stellar-ratio') : 1,
+					stellarRatio_limitpos: -1,
+					stellarLimit: $this.data('stellar-limit') !== undefined ? $this.data('stellar-limit') : false,
 					width: $this.outerWidth(true),
 					height: $this.outerHeight(true),
 					isHidden: false
@@ -483,6 +497,7 @@
 				newPositionTop,
 				newOffsetLeft,
 				newOffsetTop,
+				differenceToLimit,
 				i;
 
 			//First check that the scroll position or container size has changed
@@ -529,7 +544,30 @@
 
 					if (this.options.verticalScrolling) {
 						this._setTop(particle.$element, newPositionTop, particle.startingPositionTop);
+					
+						// when the limitting is set
+						if (particle.stellarLimit) {
+							// calculate if the particle is "at home" and stop it if data-stellar-limit is true
+							differenceToLimit = newPositionTop - particle.startingPositionTop;
+							if (particle.stellarRatio <= 0) {
+								if ((differenceToLimit > 0) && (particle.stellarRatio != 1)) {
+									particle.stellarRatio = 1;
+									particle.stellarRatio_limitpos = scrollTop;
+								}
+							} else {
+								// stop element on final position
+								if ((differenceToLimit < 0) && (particle.stellarRatio != 1)) {
+									particle.stellarRatio = 1;
+									particle.stellarRatio_limitpos = scrollTop;
+								}
+								if ((scrollTop < particle.stellarRatio_limitpos) && (particle.stellarRatio === 1)) {
+									particle.stellarRatio = particle.stellarRatio_init;
+								}
+							}
+
+						}
 					}
+
 				} else {
 					if (!particle.isHidden) {
 						this.options.hideElement(particle.$element);
