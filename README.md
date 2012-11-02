@@ -53,9 +53,10 @@ If you wanna stop a parallax transition if the mother container reaches the top:
 
 ``` html
 <div data-stellar-limit="true">
+<div data-stellar-limit-ration="0.5">
 ```
 
-As of it's now the parralax-ratio for this element will jump to 1 ... custom speed mods to come.
+As of it's now the parallax-ratio for the element will jump to what's set at "data-stellar-limit-ration" otherwise it will jump to 1.
 
 ## Configuring Offsets
 
