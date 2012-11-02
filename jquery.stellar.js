@@ -325,7 +325,7 @@
 					parentOffsetTop: parentOffsetTop,
 					stellarRatio: $this.data('stellar-ratio') !== undefined ? $this.data('stellar-ratio') : 1,
 					stellarRatio_init: $this.data('stellar-ratio') !== undefined ? $this.data('stellar-ratio') : 1,
-					stellarRatio_limitpos: -1,
+					stellarRatio_limit: $this.data('stellar-limit-ratio') !== undefined ? $this.data('stellar-limit-ratio') : 1,
 					stellarLimit: $this.data('stellar-limit') !== undefined ? $this.data('stellar-limit') : false,
 					width: $this.outerWidth(true),
 					height: $this.outerHeight(true),
@@ -495,7 +495,6 @@
 				newPositionTop,
 				newOffsetLeft,
 				newOffsetTop,
-				differenceToLimit,
 				i;
 
 			//First check that the scroll position or container size has changed
@@ -545,24 +544,24 @@
 					
 						// when the limitting is set
 						if (particle.stellarLimit) {
-							// calculate if the particle is "at home" and stop it if data-stellar-limit is true
-							differenceToLimit = newPositionTop - particle.startingPositionTop;
-							if (particle.stellarRatio <= 0) {
-								if ((differenceToLimit > 0) && (particle.stellarRatio != 1)) {
-									particle.stellarRatio = 1;
-									particle.stellarRatio_limitpos = scrollTop;
+							var scrollPos, parentDistanceViewport;
+							if (!!('ontouchstart' in window)) {
+								scrollPos = Math.round($("#page").position().top * -1); // hmmm this is bullshit!
+								parentDistanceViewport = particle.$offsetParent.position().top;
+							} else {
+								scrollPos = scrollTop;
+								parentDistanceViewport = particle.$offsetParent.position().top - scrollPos;
+							}
+
+							if (parentDistanceViewport <= particle.verticalOffset) {
+								if (particle.stellarRatio != particle.stellarRatio_limit) {
+									particle.stellarRatio = particle.stellarRatio_limit;
 								}
 							} else {
-								// stop element on final position
-								if ((differenceToLimit < 0) && (particle.stellarRatio != 1)) {
-									particle.stellarRatio = 1;
-									particle.stellarRatio_limitpos = scrollTop;
-								}
-								if ((scrollTop < particle.stellarRatio_limitpos) && (particle.stellarRatio === 1)) {
+								if (particle.stellarRatio === particle.stellarRatio_limit) {
 									particle.stellarRatio = particle.stellarRatio_init;
 								}
 							}
-
 						}
 					}
 
