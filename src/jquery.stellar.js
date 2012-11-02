@@ -1,14 +1,3 @@
-/*!
- * Stellar.js v0.4.0
- * http://markdalgleish.com/projects/stellar.js
- * https://github.com/frischmilch/stellar.js
- * https://github.com/m9dfukc/stellar.js
- * 
- * Copyright 2012, Mark Dalgleish, Johannes Henseler, Andreas Schmelas
- * This content is released under the MIT license
- * http://markdalgleish.mit-license.org
- */
-
 ;(function($, window, document, undefined){
 
 	var pluginName = 'stellar',
